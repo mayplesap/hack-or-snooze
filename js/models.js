@@ -25,8 +25,8 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    let url = new URL(this.url);
+    return url.hostname;
   }
 }
 
@@ -78,6 +78,7 @@ class StoryList {
     let newTitle = newStory.title;
     let newAuthor = newStory.author;
     let newUrl = newStory.url;
+
     const response = await axios({
       url: `${BASE_URL}/stories`,
       method: "POST",
@@ -85,6 +86,7 @@ class StoryList {
         story: { title: newTitle, author: newAuthor, url: newUrl }
     }});
     let { storyId, title, author, url, username, createdAt } = response.data.story;
+
     return new Story({storyId, title, author, url, username, createdAt});
   }
 }
@@ -133,15 +135,11 @@ class User {
       method: "POST",
       data: { user: { username, password, name } },
     });
-    console.log("console log response", response);
-    let { user } = response.data;
+
+    let {createdAt, favorites, stories} = response.data.user;
     return new User(
       {
-        username: user.username,
-        name: user.name,
-        createdAt: user.createdAt,
-        favorites: user.favorites,
-        ownStories: user.stories
+        username, name, createdAt, favorites, ownStories: stories
       },
       response.data.token
     );
@@ -160,15 +158,11 @@ class User {
       data: { user: { username, password } },
     });
 
-    let { user } = response.data;
+    let {name, createdAt, favorites, stories} = response.data.user;
 
     return new User(
       {
-        username: user.username,
-        name: user.name,
-        createdAt: user.createdAt,
-        favorites: user.favorites,
-        ownStories: user.stories
+        username, name, createdAt, favorites, ownStories: stories
       },
       response.data.token
     );
@@ -204,7 +198,7 @@ class User {
     }
   }
 
-  /** add favorite */
+  /** add favorite to API and individual user */
   async addFavorite(story) {
     story.favorite = true;
     this.favorites.push(story);
@@ -212,7 +206,20 @@ class User {
     const response = await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: "POST",
-      data: { token: this.user.loginToken
-    }});
+      data: { token: this.loginToken }
+    });
+  }
+
+  /** remove favorite from API and user */
+  async removeFavorite(story) {
+    story.favorite = false;
+    let storyInd = this.favorites.indexOf(story);
+    this.favorites.splice(storyInd, 1);
+
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "DELETE",
+      data: { token: this.loginToken }
+    });
   }
 }

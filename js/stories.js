@@ -23,6 +23,8 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
+
+  
   return $(`
       <li id="${story.storyId}">
         <a href="${story.url}" target="a_blank" class="story-link">
@@ -55,9 +57,9 @@ function putStoriesOnPage() {
 async function submitAndAddStory(evt) {
   evt.preventDefault();
   // grabs author, title, url
-  const title = $("#new-story-title").val();
-  const author = $("#new-story-author").val();
-  const url = $("#new-story-url").val();
+  const title = $newStoryTitle.val();
+  const author = $newStoryAuthor.val();
+  const url = $newStoryUrl.val();
 
   let newStory = await storyList.addStory(currentUser,{title, author, url});
   
@@ -72,5 +74,16 @@ $newStoryForm.on("submit", submitAndAddStory)
 function putStoryOnPage(story) {
   const $story = generateStoryMarkup(story);
   $allStoriesList.prepend($story);
+}
+
+/** helper function to determine if favorite icon is needed and specify which one */
+function getFavoriteIcons(story) {
+  let favoriteIcon = "fa fa-star";
+  let notFavoriteIcon = "fa fa-star-o";
+  if (currentUser.favorites.indexOf(story) != -1) {
+    return favoriteIcon;
+  } else {
+    return notFavoriteIcon;
+  }
 }
 
