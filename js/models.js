@@ -73,8 +73,9 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
+  async addStory(user, newStory) {
     // UNIMPLEMENTED: complete this function!
+    let createStory = new Story(1, newStory.title, newStory.url, user.username, user.createdAt)
   }
 }
 
@@ -122,7 +123,8 @@ class User {
       method: "POST",
       data: { user: { username, password, name } },
     });
-
+    console.log("console log response", response);
+    let { user } = response.data;
     return new User(
       {
         username: user.username,
