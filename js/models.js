@@ -74,8 +74,17 @@ class StoryList {
    */
 
   async addStory(user, newStory) {
-    // UNIMPLEMENTED: complete this function!
-    let createStory = new Story(1, newStory.title, newStory.url, user.username, user.createdAt)
+    let newTitle = newStory.title;
+    let newAuthor = newStory.author;
+    let newUrl = newStory.url;
+    const response = await axios({
+      url: `${BASE_URL}/stories`,
+      method: "POST",
+      data: { token: user.loginToken,
+        story: { title: newTitle, author: newAuthor, url: newUrl }
+    }});
+    let { storyId, title, author, url, username, createdAt } = response.data.story;
+    return new Story({storyId, title, author, url, username, createdAt});
   }
 }
 
