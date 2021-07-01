@@ -19,6 +19,7 @@ class Story {
     this.url = url;
     this.username = username;
     this.createdAt = createdAt;
+    this.favorite = false;
   }
 
   /** Parses hostname out of URL and returns it. */
@@ -201,5 +202,17 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  /** add favorite */
+  async addFavorite(story) {
+    story.favorite = true;
+    this.favorites.push(story);
+
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "POST",
+      data: { token: this.user.loginToken
+    }});
   }
 }
