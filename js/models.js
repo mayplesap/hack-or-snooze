@@ -63,14 +63,6 @@ class StoryList {
     // turn plain old story objects from API into instances of Story class
     const stories = response.data.stories.map(story => new Story(story));
 
-    // // 
-    // if (currentUser) {stories.forEach((story) => {
-    //   if (currentUser.favorites.findIndex(currentUser.inFavorites)) {
-    //     console.log(story);
-    //     story.favorite = true;
-    //   }
-    // })};
-
     // build an instance of our own class using the new array of stories
     return new StoryList(stories);
   }
@@ -123,7 +115,11 @@ class User {
     this.createdAt = createdAt;
 
     // instantiate Story instances for the user's favorites and ownStories
-    this.favorites = favorites.map(s => new Story(s));
+    this.favorites = favorites.map(s => {
+      let story = new Story(s);
+      story.favorite = true;
+      return story;
+    });
     this.ownStories = ownStories.map(s => new Story(s));
 
     // store the login token on the user so it's easy to find for API calls.
@@ -204,16 +200,6 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
-  }
-
-  /** helper function to check if story is in favorites */
-  inFavorites(story) {
-    for (let fStory of this.favorites) {
-      if (story.storyId = fStory.storyId) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /** add favorite to API and individual user */

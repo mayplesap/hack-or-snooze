@@ -31,6 +31,7 @@ function generateStoryMarkup(story) {
   // ${currentUser} ? true : other option;
 
   // <i class="${getFavoriteIcon(story)}"></i>
+  
   return $(`
       <li id="${story.storyId}">
         <a href="${story.url}" target="a_blank" class="story-link">
@@ -87,8 +88,7 @@ function putStoryOnPage(story) {
 //   let favoriteIcon = "fas fa-star";
 //   let notFavoriteIcon = "far fa-star";
 
-//   // TODO: CHANGE TO FINDINDEX
-//   if (currentUser.favorites.indexOf(story) != -1) {
+//   if (currentUser.favorites.favorite) {
 //     return favoriteIcon;
 //   } else {
 //     return notFavoriteIcon;
