@@ -63,6 +63,14 @@ class StoryList {
     // turn plain old story objects from API into instances of Story class
     const stories = response.data.stories.map(story => new Story(story));
 
+    // // 
+    // if (currentUser) {stories.forEach((story) => {
+    //   if (currentUser.favorites.findIndex(currentUser.inFavorites)) {
+    //     console.log(story);
+    //     story.favorite = true;
+    //   }
+    // })};
+
     // build an instance of our own class using the new array of stories
     return new StoryList(stories);
   }
@@ -196,6 +204,16 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  /** helper function to check if story is in favorites */
+  inFavorites(story) {
+    for (let fStory of this.favorites) {
+      if (story.storyId = fStory.storyId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** add favorite to API and individual user */

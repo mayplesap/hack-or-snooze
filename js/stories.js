@@ -30,9 +30,9 @@ function generateStoryMarkup(story) {
   // }
   // ${currentUser} ? true : other option;
 
+  // <i class="${getFavoriteIcon(story)}"></i>
   return $(`
       <li id="${story.storyId}">
-      <i class="${getFavoriteIcon(story)}"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -67,7 +67,7 @@ async function submitAndAddStory(evt) {
   const author = $newStoryAuthor.val();
   const url = $newStoryUrl.val();
 
-  let newStory = await storyList.addStory(currentUser,{title, author, url});
+  let newStory = await storyList.addStory(currentUser, {title, author, url});
   
   putStoryOnPage(newStory);
   $newStoryForm.trigger("reset");
@@ -83,14 +83,15 @@ function putStoryOnPage(story) {
 }
 
 /** helper function to determine if favorite icon is needed and specify which one */
-function getFavoriteIcon(story) {
-  let favoriteIcon = "fas fa-star";
-  let notFavoriteIcon = "far fa-star";
+// function getFavoriteIcon(story) {
+//   let favoriteIcon = "fas fa-star";
+//   let notFavoriteIcon = "far fa-star";
 
-  if (currentUser.favorites.findIndex(story) != -1) {
-    return favoriteIcon;
-  } else {
-    return notFavoriteIcon;
-  }
-}
+//   // TODO: CHANGE TO FINDINDEX
+//   if (currentUser.favorites.indexOf(story) != -1) {
+//     return favoriteIcon;
+//   } else {
+//     return notFavoriteIcon;
+//   }
+// }
 
