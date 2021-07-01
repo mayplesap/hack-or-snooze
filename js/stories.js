@@ -24,9 +24,15 @@ function generateStoryMarkup(story) {
 
   const hostName = story.getHostName();
 
-  
+  // if(currentUser) {
+  //   getFavoriteIcon(story);
+
+  // }
+  // ${currentUser} ? true : other option;
+
   return $(`
       <li id="${story.storyId}">
+      <i class="${getFavoriteIcon(story)}"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -77,10 +83,11 @@ function putStoryOnPage(story) {
 }
 
 /** helper function to determine if favorite icon is needed and specify which one */
-function getFavoriteIcons(story) {
-  let favoriteIcon = "fa fa-star";
-  let notFavoriteIcon = "fa fa-star-o";
-  if (currentUser.favorites.indexOf(story) != -1) {
+function getFavoriteIcon(story) {
+  let favoriteIcon = "fas fa-star";
+  let notFavoriteIcon = "far fa-star";
+
+  if (currentUser.favorites.findIndex(story) != -1) {
     return favoriteIcon;
   } else {
     return notFavoriteIcon;
