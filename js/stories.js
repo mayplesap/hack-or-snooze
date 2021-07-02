@@ -64,6 +64,7 @@ function putStoriesOnPage() {
 /** submit form, adds a new story the DOM and API, hides submit form */
 async function submitAndAddStory(evt) {
   evt.preventDefault();
+  
   // grabs author, title, url
   const title = $newStoryTitle.val();
   const author = $newStoryAuthor.val();
@@ -82,6 +83,7 @@ $newStoryForm.on("submit", submitAndAddStory)
 function putStoryOnPage(story) {
   const $story = generateStoryMarkup(story);
   $allStoriesList.prepend($story);
+  $allStoriesList.show();
 }
 
 /** helper function to determine if favorite icon is needed and specify which one */
@@ -102,9 +104,18 @@ function populateFavoritesList(favorites) {
   }
 }
 
-/** helper function to get story object from storyId */
-function getStoryFromStoryId(storyId) {
-  for (let story of storyList.stories) {
+/** helper function to get story object using storyId */
+function getStoryFromList(storyId, list) {
+  for (let story of list) {
+    if (storyId === story.storyId) {
+      return story;
+    }
+  }
+}
+
+/** helper function to get ownStory using storyId */
+function getOwnStories(storyId) {
+  for (let story of currentUser.ownStories) {
     if (storyId === story.storyId) {
       return story;
     }
@@ -116,11 +127,12 @@ function getStoryFromStoryId(storyId) {
  */
 function favoriteClick(evt) {
   let storyId = $(evt.target).closest("li")[0].id; // .closest("li").eq(0).attr("id")
-  let story = getStoryFromStoryId(storyId);
   if (evt.target.className === "fas fa-star") {
+    let story = getStoryFromList(storyId, currentUser.favorites);
     evt.target.className = "far fa-star"
     currentUser.removeFavorite(story);
   } else {
+    let story = getStoryFromList(storyId, storyList.stories);
     evt.target.className = "fas fa-star"
     currentUser.addFavorite(story);
   }
@@ -137,6 +149,7 @@ function populateMyStoriesList(ownStories) {
     $myStoriesList.prepend($ownStory);
   }
   addTrashIcon();
+
 }
 
 /** helper function to .......*/
@@ -147,8 +160,17 @@ function addTrashIcon() {
     let $icon = "<i class='fas fa-trash-alt'></i>";
     $(storyLi).prepend($icon);
   }
-  //return `<i class="fas fa-trash-alt"></i>`;
 }
+
+/**  */
+function trashcanClick(evt) {
+  let storyId = $(evt.target).closest("li").eq(0).attr("id");
+  let story = getStoryFromList(storyId, currentUser.ownStories);
+  currentUser.deleteStory(story);
+  evt.target.parentNode.remove();
+}
+
+$("#my-stories-list").on("click", ".fa-trash-alt", trashcanClick)
 
 // COULDN'T GET THIS TO WORK 1ST ICON ATTEMPT
 // function populateFavoriteIcons() {

@@ -217,7 +217,7 @@ class User {
   /** remove favorite from API and user */
   async removeFavorite(story) {
     story.favorite = false;
-    let storyInd = this.getFavoriteIdxFromStoryId(story.storyId);
+    let storyInd = this.getIdxFromList(story.storyId, "favorites");
     this.favorites.splice(storyInd, 1); //could filter over fav array and where match id = return false so not in returned array
 
     const response = await axios({
@@ -227,10 +227,10 @@ class User {
     });
   }
 
-  /** gets index of story inside of user's favorites using storyid */
- getFavoriteIdxFromStoryId(storyId) {
-  for (let storyInd in this.favorites) {
-    if (storyId === this.favorites[storyInd].storyId) {
+  /** gets index of story from desired list using storyid */
+ getIdxFromList(storyId, list) {
+  for (let storyInd in this[list]) {
+    if (storyId === this[list][storyInd].storyId) {
       return storyInd;
     }
   }
@@ -246,5 +246,16 @@ class User {
       return true;
     }
     return false;
+  }
+
+  async deleteStory(story) {
+    let storyInd = this.getIdxFromList(story.storyId, "ownStories");
+    this.ownStories.splice(storyInd, 1);
+
+    const response = await axios({
+      url: `${BASE_URL}/stories/${story.storyId}`,
+      method: "DELETE",
+      data: { token: this.loginToken }
+    });
   }
 }
