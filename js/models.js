@@ -66,14 +66,21 @@ class StoryList {
 
     /** <--------------- FIX THIS SOMETIME MAKE BETTER (NEEDS BETTER PLACEMENT
      * AND NAMING IDK) IDK */
-    if (currentUser) {
-      for (let story of stories) {
-        story.favorite = User.inFavorites(story);
-      }
-    }
+    
 
     // build an instance of our own class using the new array of stories
     return new StoryList(stories);
+  }
+
+  /** gets the current user's favorites and marks them all as favorites
+   *  inside of StoryList
+   */
+  loadFavorites(stories) {
+    if (currentUser) {
+      for (let story of stories) {
+        story.favorite = currentUser.inFavorites(story);
+      }
+    }
   }
 
   /** Adds story data to API, makes a Story instance, adds it to story list.
@@ -237,9 +244,9 @@ class User {
   }
 
   /** checks to see if story is in user's favorites */
-  static inFavorites(story) {
+  inFavorites(story) {
     let favoritesObj = {};
-    for (let fStory of currentUser.favorites) {
+    for (let fStory of this.favorites) {
       favoritesObj[fStory.storyId] = true;
     }
     if (story.storyId in favoritesObj) {

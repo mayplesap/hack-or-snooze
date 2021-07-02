@@ -85,7 +85,7 @@ function putStoryOnPage(story) {
 
 /** helper function to determine if favorite icon is needed and specify which one */
 function getFavoriteIcon(story) {
-  if (User.inFavorites(story)) {
+  if (currentUser.inFavorites(story)) {
     return `<i class="fas fa-star"></i>`;
   } else {
     return `<i class="far fa-star"></i>`;
