@@ -10,6 +10,10 @@
   margin: 10px 0;
 }
 
+#my-stories-list > li {
+   list-style-type: none;
+}
+
 #stories-loading-msg {
   font-weight: bold;
   font-size: 150%;
@@ -36,4 +40,9 @@
 
 .story-user {
   display: block;
+}
+
+/* Trash Icon */
+.fa-trash-alt:hover {
+  color: rgb(218, 0, 0);
 }

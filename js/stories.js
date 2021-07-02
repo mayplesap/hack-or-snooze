@@ -86,7 +86,7 @@ function putStoryOnPage(story) {
 
 /** helper function to determine if favorite icon is needed and specify which one */
 function getFavoriteIcon(story) {
-  if (currentUser.inFavorites(story)) {
+  if (currentUser.inFavorites(story)) { 
     return `<i class="fas fa-star"></i>`;
   } else {
     return `<i class="far fa-star"></i>`;
@@ -115,7 +115,7 @@ function getStoryFromStoryId(storyId) {
  *  adding/removing favorite
  */
 function favoriteClick(evt) {
-  let storyId = $(evt.target).closest("li")[0].id
+  let storyId = $(evt.target).closest("li")[0].id; // .closest("li").eq(0).attr("id")
   let story = getStoryFromStoryId(storyId);
   if (evt.target.className === "fas fa-star") {
     evt.target.className = "far fa-star"
@@ -126,7 +126,29 @@ function favoriteClick(evt) {
   }
 }
 
-$allStoriesList.on("click", ".fa-star", favoriteClick);
+$(".stories-list").on("click", ".fa-star", favoriteClick);
+
+/** get the stories currentUser submitted and adds to ownStories list */
+
+function populateMyStoriesList(ownStories) {
+  $myStoriesList.empty();
+  for (let myStory of ownStories) {
+    let $ownStory = generateStoryMarkup(myStory);
+    $myStoriesList.prepend($ownStory);
+  }
+  addTrashIcon();
+}
+
+/** helper function to .......*/
+
+function addTrashIcon() {
+  for (let storyLi of Array.from($myStoriesList.children())){
+    //debugger
+    let $icon = "<i class='fas fa-trash-alt'></i>";
+    $(storyLi).prepend($icon);
+  }
+  //return `<i class="fas fa-trash-alt"></i>`;
+}
 
 // COULDN'T GET THIS TO WORK 1ST ICON ATTEMPT
 // function populateFavoriteIcons() {

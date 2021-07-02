@@ -53,3 +53,13 @@ function navFavoritesClick() {
 }
 
 $navFavorites.on("click", navFavoritesClick);
+
+/** Show my stories section on click on "my stories" */
+
+function navMyStoryClick() {
+  populateMyStoriesList(currentUser.ownStories);
+  hidePageComponents();
+  $myStoriesList.show();
+}
+
+$navMyStories.on("click", navMyStoryClick);

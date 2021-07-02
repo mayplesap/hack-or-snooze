@@ -218,7 +218,7 @@ class User {
   async removeFavorite(story) {
     story.favorite = false;
     let storyInd = this.getFavoriteIdxFromStoryId(story.storyId);
-    this.favorites.splice(storyInd, 1);
+    this.favorites.splice(storyInd, 1); //could filter over fav array and where match id = return false so not in returned array
 
     const response = await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
@@ -238,7 +238,7 @@ class User {
 
   /** checks to see if story is in user's favorites */
   inFavorites(story) {
-    let favoritesObj = {};
+    let favoritesObj = {}; //could've used set
     for (let fStory of this.favorites) {
       favoritesObj[fStory.storyId] = true;
     }
