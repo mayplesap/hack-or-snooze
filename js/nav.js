@@ -36,6 +36,7 @@ function updateNavOnLogin() {
 }
 
 /** Show submit form on click on "submit" */
+
 function navSubmitClick() {
   $newStoryForm.show();
   $allStoriesList.show();
