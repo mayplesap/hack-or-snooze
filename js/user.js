@@ -110,8 +110,8 @@ function saveUserCredentialsInLocalStorage() {
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
-  getAndShowStoriesOnStart(); // <------- IS THIS CORRECT?
-  populateFavoritesList(currentUser.favorites);
+  getAndShowStoriesOnStart();
+  // populateFavoriteIcons(); // SUPPOSED TO WORK WITH STORIES.JS LINE 131 BUT DOESN'T
   $allStoriesList.show();
   $loginForm.hide();
   $signupForm.hide();

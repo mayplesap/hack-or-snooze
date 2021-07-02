@@ -63,24 +63,8 @@ class StoryList {
     // turn plain old story objects from API into instances of Story class
     const stories = response.data.stories.map(story => new Story(story));
 
-
-    /** <--------------- FIX THIS SOMETIME MAKE BETTER (NEEDS BETTER PLACEMENT
-     * AND NAMING IDK) IDK */
-    
-
     // build an instance of our own class using the new array of stories
     return new StoryList(stories);
-  }
-
-  /** gets the current user's favorites and marks them all as favorites
-   *  inside of StoryList
-   */
-  loadFavorites(stories) {
-    if (currentUser) {
-      for (let story of stories) {
-        story.favorite = currentUser.inFavorites(story);
-      }
-    }
   }
 
   /** Adds story data to API, makes a Story instance, adds it to story list.
@@ -233,7 +217,7 @@ class User {
   /** remove favorite from API and user */
   async removeFavorite(story) {
     story.favorite = false;
-    let storyInd = this.favorites.indexOf(story);
+    let storyInd = this.getFavoriteIdxFromStoryId(story.storyId);
     this.favorites.splice(storyInd, 1);
 
     const response = await axios({
@@ -242,6 +226,15 @@ class User {
       data: { token: this.loginToken }
     });
   }
+
+  /** gets index of story inside of user's favorites using storyid */
+ getFavoriteIdxFromStoryId(storyId) {
+  for (let storyInd in this.favorites) {
+    if (storyId === this.favorites[storyInd].storyId) {
+      return storyInd;
+    }
+  }
+}
 
   /** checks to see if story is in user's favorites */
   inFavorites(story) {

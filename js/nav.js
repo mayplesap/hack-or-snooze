@@ -47,6 +47,7 @@ $navSubmit.on("click", navSubmitClick);
 /** Show favorites section on click on "favorites" */
 
 function navFavoritesClick() {
+  populateFavoritesList(currentUser.favorites);
   hidePageComponents();
   $favoritesList.show();
 }

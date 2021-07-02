@@ -31,6 +31,7 @@ function generateStoryMarkup(story) {
   // ${currentUser} ? true : other option;
 
   // <i class="${getFavoriteIcon(story)}"></i>
+
   return $(`
       <li id="${story.storyId}">
         ${(currentUser) ? getFavoriteIcon(story) : ""}
@@ -94,8 +95,62 @@ function getFavoriteIcon(story) {
 
 /** get currentuser's favorites list and adds to favorites list */
 function populateFavoritesList(favorites) {
+  $favoritesList.empty();
   for (let favorite of favorites) {
     let $favStory = generateStoryMarkup(favorite);
-    $favoritesList.append($favStory);
+    $favoritesList.prepend($favStory);
   }
 }
+
+/** helper function to get story object from storyId */
+function getStoryFromStoryId(storyId) {
+  for (let story of storyList.stories) {
+    if (storyId === story.storyId) {
+      return story;
+    }
+  }
+}
+
+/** handles favoriteclick event by changing favorite icon and
+ *  adding/removing favorite
+ */
+function favoriteClick(evt) {
+  let storyId = $(evt.target).closest("li")[0].id
+  let story = getStoryFromStoryId(storyId);
+  if (evt.target.className === "fas fa-star") {
+    evt.target.className = "far fa-star"
+    currentUser.removeFavorite(story);
+  } else {
+    evt.target.className = "fas fa-star"
+    currentUser.addFavorite(story);
+  }
+}
+
+$allStoriesList.on("click", ".fa-star", favoriteClick);
+
+// COULDN'T GET THIS TO WORK 1ST ICON ATTEMPT
+// function populateFavoriteIcons() {
+//   // console.log($allStoriesList.children());
+//   let favoriteIds = {};
+//   for (let fStory of currentUser.favorites) {
+//     favoriteIds[fStory.storyId] = true;
+//   }
+//   for (let storyLi of Array.from($allStoriesList.children())) {
+//     let $icon = getIconMarkup(storyLi.storyId, favoriteIds)
+//     storyLi.prepend($($icon));
+//     // if (storyLi.storyId in favoriteIds) {
+//     //   storyLi.prepend($(`<i class="fas fa-star"></i>`));
+//     // } else {
+//     //   storyLi.prepend($(`<i class="far fa-star"></i>`));
+//     // }
+//   }
+// }
+
+// function getIconMarkup(storyId, favoriteIds) {
+//   if (storyId in favoriteIds) {
+//     return `<i class="fas fa-star"></i>`;
+//   } else {
+//     return `<i class="far fa-star"></i>`;
+//   }
+// }
+
