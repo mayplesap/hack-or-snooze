@@ -110,7 +110,10 @@ function saveUserCredentialsInLocalStorage() {
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
+  getAndShowStoriesOnStart(); // <------- IS THIS CORRECT?
   $allStoriesList.show();
+  $loginForm.hide();
+  $signupForm.hide();
 
   updateNavOnLogin();
 }

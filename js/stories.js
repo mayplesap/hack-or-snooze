@@ -31,9 +31,9 @@ function generateStoryMarkup(story) {
   // ${currentUser} ? true : other option;
 
   // <i class="${getFavoriteIcon(story)}"></i>
-  
   return $(`
       <li id="${story.storyId}">
+        ${(currentUser) ? getFavoriteIcon(story) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -84,14 +84,11 @@ function putStoryOnPage(story) {
 }
 
 /** helper function to determine if favorite icon is needed and specify which one */
-// function getFavoriteIcon(story) {
-//   let favoriteIcon = "fas fa-star";
-//   let notFavoriteIcon = "far fa-star";
-
-//   if (currentUser.favorites.favorite) {
-//     return favoriteIcon;
-//   } else {
-//     return notFavoriteIcon;
-//   }
-// }
+function getFavoriteIcon(story) {
+  if (User.inFavorites(story)) {
+    return `<i class="fas fa-star"></i>`;
+  } else {
+    return `<i class="far fa-star"></i>`;
+  }
+}
 
