@@ -73,6 +73,9 @@ async function submitAndAddStory(evt) {
   let newStory = await storyList.addStory(currentUser, {title, author, url});
   
   putStoryOnPage(newStory);
+  currentUser.ownStories.push(newStory);
+
+  $myStoriesList.prepend("hello");
   $newStoryForm.trigger("reset");
   $newStoryForm.hide();
 }
@@ -83,7 +86,6 @@ $newStoryForm.on("submit", submitAndAddStory)
 function putStoryOnPage(story) {
   const $story = generateStoryMarkup(story);
   $allStoriesList.prepend($story);
-  $allStoriesList.show();
 }
 
 /** helper function to determine if favorite icon is needed and specify which one */
@@ -125,18 +127,39 @@ function getOwnStories(storyId) {
 /** handles favoriteclick event by changing favorite icon and
  *  adding/removing favorite
  */
-function favoriteClick(evt) {
+async function favoriteClick(evt) {
   let storyId = $(evt.target).closest("li")[0].id; // .closest("li").eq(0).attr("id")
   if (evt.target.className === "fas fa-star") {
     let story = getStoryFromList(storyId, currentUser.favorites);
     evt.target.className = "far fa-star"
     currentUser.removeFavorite(story);
   } else {
-    let story = getStoryFromList(storyId, storyList.stories);
+
+    // need to check API for specific story in case the story is no longer in storyList
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "GET"
+    });
+
+    let { title, author, url, username, createdAt } = response.data.story;
+
+    let story = new Story({storyId, title, author, url, username, createdAt});
     evt.target.className = "fas fa-star"
     currentUser.addFavorite(story);
   }
 }
+
+// /** get all stories from API */ <------- UNFIXABLE BUG CAUSE API
+
+// async function getAllStories() {
+//   const response = await axios({
+//     url: `${BASE_URL}/stories`,
+//     method: "GET",
+//     data: { token: currentUser.loginToken,
+//       params: { limit: 1000 }
+//   }});
+//   return response;
+// }
 
 $(".stories-list").on("click", ".fa-star", favoriteClick);
 
@@ -152,8 +175,7 @@ function populateMyStoriesList(ownStories) {
 
 }
 
-/** helper function to .......*/
-
+/** adds trash icons to stories in my-story-list */
 function addTrashIcon() {
   for (let storyLi of Array.from($myStoriesList.children())){
     //debugger
@@ -162,12 +184,12 @@ function addTrashIcon() {
   }
 }
 
-/**  */
+/** handles trash can clicking by deleting the story from user/api */
 function trashcanClick(evt) {
   let storyId = $(evt.target).closest("li").eq(0).attr("id");
   let story = getStoryFromList(storyId, currentUser.ownStories);
   currentUser.deleteStory(story);
-  evt.target.parentNode.remove();
+  $(evt.target).parent().remove();
 }
 
 $("#my-stories-list").on("click", ".fa-trash-alt", trashcanClick)

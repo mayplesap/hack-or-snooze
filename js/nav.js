@@ -9,7 +9,9 @@
 function navAllStories(evt) {
   console.debug("navAllStories", evt);
   hidePageComponents();
-  putStoriesOnPage();
+  getAndShowStoriesOnStart();
+  // putStoriesOnPage();
+  $allStoriesList.show();
 }
 
 $body.on("click", "#nav-all", navAllStories);
@@ -38,7 +40,9 @@ function updateNavOnLogin() {
 /** Show submit form on click on "submit" */
 
 function navSubmitClick() {
+  hidePageComponents();
   $newStoryForm.show();
+  getAndShowStoriesOnStart();
   $allStoriesList.show();
 }
 

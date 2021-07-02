@@ -228,13 +228,13 @@ class User {
   }
 
   /** gets index of story from desired list using storyid */
- getIdxFromList(storyId, list) {
-  for (let storyInd in this[list]) {
-    if (storyId === this[list][storyInd].storyId) {
-      return storyInd;
+  getIdxFromList(storyId, list) {
+    for (let storyInd in this[list]) {
+      if (storyId === this[list][storyInd].storyId) {
+        return storyInd;
+      }
     }
   }
-}
 
   /** checks to see if story is in user's favorites */
   inFavorites(story) {
@@ -248,6 +248,7 @@ class User {
     return false;
   }
 
+  /** deletes story from api */
   async deleteStory(story) {
     let storyInd = this.getIdxFromList(story.storyId, "ownStories");
     this.ownStories.splice(storyInd, 1);

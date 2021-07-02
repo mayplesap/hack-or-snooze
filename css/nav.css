@@ -8,6 +8,10 @@ nav {
   border-radius: 3px 3px 0 0;
 }
 
+nav .secondary {
+  font-weight: 50;
+}
+
 .navbar-brand {
   font-weight: bold;
 }
