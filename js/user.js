@@ -111,6 +111,7 @@ function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
   getAndShowStoriesOnStart(); // <------- IS THIS CORRECT?
+  populateFavoritesList(currentUser.favorites);
   $allStoriesList.show();
   $loginForm.hide();
   $signupForm.hide();

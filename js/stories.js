@@ -92,3 +92,10 @@ function getFavoriteIcon(story) {
   }
 }
 
+/** get currentuser's favorites list and adds to favorites list */
+function populateFavoritesList(favorites) {
+  for(let favorite of favorites) {
+    let $favStory = generateStoryMarkup(favorite);
+    $favoritesList.append($favStory);
+  }
+}
